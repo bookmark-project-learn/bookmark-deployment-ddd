@@ -55,6 +55,7 @@ services:
     depends_on:
       - portal
       - bookmark_service
+      - user_service
 
   user_postgres:
     container_name: user_postgres
