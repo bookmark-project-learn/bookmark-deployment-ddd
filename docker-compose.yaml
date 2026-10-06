@@ -3,12 +3,12 @@ services:
     image: redis:alpine
     container_name: redis
   bookmark_service:
-    image: dungi3/bookmark_deployment_bookmark_service:v0.0.1
+    image: tqdung1234/bookmarks-bookmark-service:v0.0.1
     build: .
     container_name: bookmark_service
     env_file:
-      - ./bookmark/bookmark_service.env
-      - ./bookmark/bookmark_postgre.env
+      - ./bookmark/.bookmark_service.env
+      - ./bookmark/.bookmark_postgre.env
     depends_on:
       redis:
         condition: service_started
@@ -16,12 +16,12 @@ services:
         condition: service_healthy
 
   user_service:
-    image: dungi3/bookmark_deployment_user_service:v0.0.1
+    image: tqdung1234/bookmarks-user-service:v0.0.1
     build: .
     container_name: user_service
     env_file:
-      - ./user/user_service.env
-      - ./user/user_postgre.env
+      - ./user/.user_service.env
+      - ./user/.user_postgre.env
     depends_on:
       user_postgres:
         condition: service_healthy
@@ -31,18 +31,18 @@ services:
     container_name: bookmark_postgres
     image: postgres:alpine
     env_file:
-      - ./bookmark/bookmark_postgre.env
+      - ./bookmark/.bookmark_postgre.env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d bookmark"]
       interval: 5s
       timeout: 5s
       retries: 5
     volumes:
-      - ./bookmark/postgre-data:/var/lib/postgresql
+      - ./bookmark/postgres-data:/var/lib/postgresql
 
 
   portal:
-    image: ebvn/bookmark-app-portal:mono
+    image: ebvn/bookmark-app-portal:ddd
     container_name: portal
 
   nginx:
@@ -60,12 +60,12 @@ services:
     container_name: user_postgres
     image: postgres:alpine
     env_file:
-      - ./user/user_postgre.env
-      - ./user/user_service.env
+      - ./user/.user_postgre.env
+      - ./user/.user_service.env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d user"]
       interval: 5s
       timeout: 5s
       retries: 5
     volumes:
-      - ./user/postgre-data:/var/lib/postgresql
+      - ./user/postgres-data:/var/lib/postgresql
