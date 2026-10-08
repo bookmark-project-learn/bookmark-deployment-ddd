@@ -3,7 +3,7 @@ services:
     image: redis:alpine
     container_name: redis
   bookmark_service:
-    image: tqdung1234/bookmarks-bookmark-service:v0.0.1
+    image: tqdung1234/bookmarks-bookmark-service:v0.0.2
     build: .
     container_name: bookmark_service
     env_file:
@@ -16,7 +16,7 @@ services:
         condition: service_healthy
 
   user_service:
-    image: tqdung1234/bookmarks-user-service:v0.0.1
+    image: tqdung1234/bookmarks-user-service:v0.0.2
     build: .
     container_name: user_service
     env_file:
