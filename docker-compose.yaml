@@ -3,8 +3,7 @@ services:
     image: redis:alpine
     container_name: redis
   bookmark_service:
-    image: tqdung1234/bookmarks-bookmark-service:v0.0.2
-    build: .
+    image: tqdung1234/bookmarks-bookmark-service:v0.0.3
     container_name: bookmark_service
     env_file:
       - ./bookmark/.bookmark_service.env
@@ -14,13 +13,24 @@ services:
         condition: service_started
       bookmark_postgres:
         condition: service_healthy
+      bookmark_rabbitmq:
+        condition: service_healthy
     volumes:
       - ./privatekey.pem:/app/privatekey.pem
       - ./publickey.pem:/app/publickey.pem
 
+  bookmark_rabbitmq:
+    image: rabbitmq:4.4
+    container_name: bookmark_queue
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
   user_service:
-    image: tqdung1234/bookmarks-user-service:v0.0.2
-    build: .
+    image: tqdung1234/bookmarks-user-service:v0.0.3
     container_name: user_service
     env_file:
       - ./user/.user_service.env
@@ -28,6 +38,9 @@ services:
     depends_on:
       user_postgres:
         condition: service_healthy
+    volumes:
+      - ./privatekey.pem:/app/privatekey.pem
+      - ./publickey.pem:/app/publickey.pem
     volumes:
       - ./privatekey.pem:/app/privatekey.pem
       - ./publickey.pem:/app/publickey.pem
