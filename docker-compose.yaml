@@ -41,6 +41,9 @@ services:
     volumes:
       - ./privatekey.pem:/app/privatekey.pem
       - ./publickey.pem:/app/publickey.pem
+    volumes:
+      - ./privatekey.pem:/app/privatekey.pem
+      - ./publickey.pem:/app/publickey.pem
 
   
   bookmark_postgres:
