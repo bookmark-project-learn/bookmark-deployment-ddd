@@ -4,7 +4,6 @@ services:
     container_name: redis
   bookmark_service:
     image: tqdung1234/bookmarks-bookmark-service:v0.0.2
-    build: .
     container_name: bookmark_service
     env_file:
       - ./bookmark/.bookmark_service.env
@@ -14,12 +13,12 @@ services:
         condition: service_started
       bookmark_postgres:
         condition: service_healthy
-      rabbitmq:
+      bookmark_rabbitmq:
         condition: service_healthy
     volumes:
       - ./privatekey.pem:/app/privatekey.pem
       - ./publickey.pem:/app/publickey.pem
-      
+
   bookmark_rabbitmq:
     image: rabbitmq:4.4
     container_name: bookmark_queue
@@ -32,7 +31,6 @@ services:
 
   user_service:
     image: tqdung1234/bookmarks-user-service:v0.0.2
-    build: .
     container_name: user_service
     env_file:
       - ./user/.user_service.env
