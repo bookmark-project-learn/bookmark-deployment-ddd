@@ -14,6 +14,21 @@ services:
         condition: service_started
       bookmark_postgres:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ./privatekey.pem:/app/privatekey.pem
+      - ./publickey.pem:/app/publickey.pem
+      
+  bookmark_rabbitmq:
+    image: rabbitmq:4.4
+    container_name: bookmark_queue
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 
   user_service:
     image: tqdung1234/bookmarks-user-service:v0.0.2
@@ -25,6 +40,9 @@ services:
     depends_on:
       user_postgres:
         condition: service_healthy
+    volumes:
+      - ./privatekey.pem:/app/privatekey.pem
+      - ./publickey.pem:/app/publickey.pem
 
   
   bookmark_postgres:

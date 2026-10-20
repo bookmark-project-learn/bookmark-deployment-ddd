@@ -1,2 +1,4 @@
 /bookmark/postgres-data
 /user/postgres-data
+privatekey.pem
+publickey.pem

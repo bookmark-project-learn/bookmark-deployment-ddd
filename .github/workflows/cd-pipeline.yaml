@@ -17,11 +17,7 @@ jobs:
           git fetch
           git checkout main
           git pull origin main
-          sudo docker ps -f "name=bookmark_service" --format '{{.Names}}' | grep -q bookmark_service && sudo docker rm -f bookmark_service
-          sudo docker compose pull bookmark_service
-          sudo docker compose up -d --remove-orphans bookmark_service
-
-          sudo docker ps -f "name=user_service" --format '{{.Names}}' | grep -q user_service && sudo docker rm -f user_service
-          sudo docker compose pull user_service
-          sudo docker compose up -d --remove-orphans user_service
-          sudo docker system prune -f
+          make generate-rsa-key
+          make deploy-bookmark-service
+          make deploy-user-service
+          make clean-deploy-prune
